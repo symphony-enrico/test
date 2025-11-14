@@ -15,24 +15,22 @@ import com.symphony.bdk.http.api.util.TypeReference;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateUser {
 
     public static void main(String[] args) throws Exception {
-        String botUserName = "userwihprovisioning";
-        String sbeUrl = "https://";
+        String agentToCreate = "<agent-to-create-username>";
 
-        final SymphonyBdk bdk = Bdk.getBdk(botUserName, sbeUrl);
+        final SymphonyBdk bdk = Bdk.getBdk(Bdk.userProvisioningSA);
 
-        // AGENT TO CREATE
-        final String agentUserName = "agentCreationExample2";
-
+        // AGENT CREATE
         final V2UserCreate newUser = new V2UserCreate();
         final V2UserAttributes attrs = new V2UserAttributes();
-        attrs.setUserName(agentUserName);
-        attrs.setEmailAddress(agentUserName + "@symphony.com"); // TODO should differ per tenant
-        attrs.setDisplayName(agentUserName);
+        attrs.setUserName(agentToCreate);
+        attrs.setEmailAddress(agentToCreate + "@email.com"); // TODO should differ per tenant
+        attrs.setDisplayName(agentToCreate);
         attrs.setAccountType(V2UserAttributes.AccountTypeEnum.SYSTEM);
         attrs.setCurrentKey(createSAKey());
         newUser.setUserAttributes(attrs);
@@ -46,15 +44,19 @@ public class CreateUser {
 
         final ApplicationInfo appInfo = new ApplicationInfo();
         appInfo.setAppId(appId);
-        appInfo.setName(agentUserName);
+        appInfo.setName(agentToCreate);
         appInfo.setPublisher("Symphony");
         appInfo.setDomain("symphony.com");
 
         final ApplicationDetail appDetail = new ApplicationDetail();
         appDetail.setApplicationInfo(appInfo);
-        appDetail.setDescription("");
-        //appDetail.setPermissions();
+        appDetail.setDescription("Test app");
+        appDetail.setPermissions(List.of("GET_BASIC_USER_INFO", "GET_MESSAGES","ACT_AS_USER", "GET_EXTENDED_USER_INFO"));
         appDetail.setAuthenticationKeys(createAppKey());
+
+        List<AppProperty> properties = new ArrayList<>();
+        properties.add(new AppProperty().key("testKey").value("testValue"));
+        appDetail.setProperties(properties);
 
         // FIXME: the public API and therefore the Java BDK haven't been updated yet for setting the appSA when creating an app
         ObjectNode createAppJson = new ObjectMapper().valueToTree(appDetail);

@@ -9,10 +9,9 @@ import com.symphony.bdk.http.api.ApiException;
 public class StartDatafeed {
 
     public static void main(String[] args) throws AuthInitializationException, AuthUnauthorizedException, ApiException {
-        String botUserName = "userTotest";
-        String sbeUrl = "https://";
+        String botUserName = "<new-bot-username>";
 
-        final SymphonyBdk bdk = Bdk.getBdk(botUserName, sbeUrl);
+        final SymphonyBdk bdk = Bdk.getBdk(botUserName);
 
         bdk.datafeed().start();
     }

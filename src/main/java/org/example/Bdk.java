@@ -11,22 +11,25 @@ import java.nio.charset.StandardCharsets;
 
 public class Bdk {
 
-    public static SymphonyBdk getBdk(String botUserName, String sbeUrl) throws AuthInitializationException, AuthUnauthorizedException {
+    public static SymphonyBdk getBdk(String botUserName) throws AuthInitializationException, AuthUnauthorizedException {
         return new SymphonyBdkBuilder()
                 .config(getConfig(botUserName, privateKey(), sbeUrl, sbeUrl))
                 .build();
     }
 
+    public static String sbeUrl = "https://<pod-url>";
+    public static String userProvisioningSA = "<user-provisioning-SA-username>";
+
     public static String privateKey() {
         return """
-                -----BEGIN PRIVATE KEY-----
-                -----END PRIVATE KEY-----""";
+-----BEGIN PRIVATE KEY-----
+-----END PRIVATE KEY-----""".trim();
     }
 
     public static String publicKey() {
         return """
-                -----BEGIN PUBLIC KEY-----
-                -----END PUBLIC KEY-----""";
+-----BEGIN PUBLIC KEY-----
+-----END PUBLIC KEY-----""".trim();
     }
 
     private static BdkConfig getConfig(String botUserName, String privateKeyContent, String sbeUrl, String agentUrl) {
